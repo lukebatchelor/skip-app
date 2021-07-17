@@ -1,20 +1,31 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  TextField,
-  Typography,
-  useMediaQuery,
-} from '@material-ui/core';
+import { Box, Button, Container, styled, TextField, Typography, useMediaQuery } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
+
 import NoSsr from '../components/NoSsr';
+
+const StyledTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: 'var(--color-font-main)',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: 'var(--color-font-main)',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'var(--color-font-main)',
+    },
+    '&:hover fieldset': {
+      borderColor: 'var(--color-font-main)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'var(--color-font-main)',
+    },
+  },
+});
 
 export default function Home() {
   const [url, setUrl] = React.useState<string>('');
-  const [loading, setLoading] = React.useState<boolean>(false);
   const largeScreen = useMediaQuery('(min-width:600px)');
 
   useEffect(() => {
@@ -24,8 +35,10 @@ export default function Home() {
   }, []);
 
   const onUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value);
-  const handleClose = () => setLoading(false);
-  const onSubmit = () => goToSite(url);
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    goToSite(url);
+  };
   return (
     <NoSsr>
       <Head>
@@ -44,55 +57,58 @@ export default function Home() {
             <Typography align="center" variant="h5" gutterBottom>
               A super simple app with one purpose, no ads, no tracking and no cookies.
             </Typography>
-            <TextField
-              id="url"
-              label="Url"
-              placeholder="Paste link here"
-              value={url}
-              onChange={onUrlChange}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <Box mt={2} />
-            <Typography variant="body1">
-              Enter the url of any page with annoying content that needs to be skipped and you will be redirected to a
-              site where you shuould be able to read you content unobstructed.
-            </Typography>
-            <NoSsr>
-              <Typography variant="body1">
-                Also, if you would like to save this site site as an executable bookmarklet, you will be able to click a
-                bookmark whilst you are on the offending page and be automatically redirected. Simply drag{' '}
-                {!isServer() && (
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: `<a href="javascript:window.location.replace(\`${window?.location?.origin}/?url=\$\{window.location.href\}\`);" title='Skip it!'>This link</a>`,
-                    }}
-                  ></span>
-                )}
-                to your book marks bar. Then head to a site where you want to skip, and click the book bark whilst
-                there.
-              </Typography>
-            </NoSsr>
-            <Typography variant="body1">
-              Alternatively, if you are on mobile, you should also get a prompt asking your to add this site to your
-              home screen. By installing this Progressive Web App (PWA) you will be able to
-            </Typography>
-            <ul>
-              <li>Access this site as a fullscreen app experience the same way you would access a normal app</li>
-              <li>
-                Ability to &quot;Share&quot; any url that you are currently on straight to the app - this can be done in
-                as little as two clicks!
-              </li>
-            </ul>
             <form onSubmit={onSubmit} style={{ width: '100%' }}>
-              <Box mt={4} display="flex" justifyContent="center" flexDirection="column">
-                <Box mt={4} />
-                <Backdrop open={loading} onClick={handleClose}>
-                  <CircularProgress color="inherit" />
-                </Backdrop>
-              </Box>
+              <StyledTextField
+                id="url"
+                label="Url"
+                placeholder="Paste link here"
+                value={url}
+                onChange={onUrlChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                  style: { color: 'var(--color-font-main)' },
+                }}
+                InputProps={{
+                  style: { color: 'var(--color-font-main)' },
+                }}
+              />
+              <Box mt={2} />
+              <Typography variant="body1" gutterBottom>
+                Enter the url of any page with annoying content that needs to be skipped and you will be redirected to a
+                site where you shuould be able to read you content unobstructed.
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Also, if you would like to save this site site as an executable bookmarklet, you will be able to click a
+                bookmark whilst you are on the offending page and be automatically redirected.
+              </Typography>
+              <NoSsr>
+                <Typography variant="body1" gutterBottom>
+                  Simply drag{' '}
+                  {!isServer() && (
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: `<a href="javascript:window.location.replace(\`${window?.location?.origin}/?url=\$\{window.location.href\}\`);"
+                       title='Skip it!'>This link</a>`,
+                      }}
+                    ></span>
+                  )}{' '}
+                  to your book marks bar. Then head to a site where you want to skip, and click the book bark whilst
+                  there.
+                </Typography>
+              </NoSsr>
+              <Typography variant="body1" gutterBottom>
+                Alternatively, if you are on mobile, you should also get a prompt asking your to add this site to your
+                home screen. By installing this Progressive Web App (PWA) you will be able to
+              </Typography>
+              <ul>
+                <li>Access this site as a fullscreen app experience the same way you would access a normal app</li>
+                <li>
+                  Ability to &quot;Share&quot; any url that you are currently on straight to the app - this can be done
+                  in as little as two clicks!
+                </li>
+              </ul>
+              <Box mt={18} />
             </form>
             <Box flexGrow={1} />
             <Box position="fixed" bottom={24} right={0} width="100%" display="flex" justifyContent="center">
@@ -101,7 +117,7 @@ export default function Home() {
                 variant="contained"
                 color="primary"
                 onClick={onSubmit}
-                disabled={loading || url.length === 0}
+                disabled={url.length === 0}
               >
                 Skip it!
               </Button>

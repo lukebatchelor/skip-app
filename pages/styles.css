@@ -1,5 +1,11 @@
+:root {
+  --color-font-main: #e0e0e0;
+}
+
 body {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   background: url('/background.jpeg');
+  color: var(--color-font-main);
 }
 html,
 body,
