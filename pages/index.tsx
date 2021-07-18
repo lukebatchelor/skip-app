@@ -5,6 +5,9 @@ import React, { useEffect } from 'react';
 import NoSsr from '../components/NoSsr';
 
 const StyledTextField = styled(TextField)({
+  width: '100%',
+  marginTop: '24px',
+  marginBottom: '24px',
   '& label.Mui-focused': {
     color: 'var(--color-font-main)',
   },
@@ -52,10 +55,10 @@ export default function Home() {
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <Box display="flex" height="100%" flexDirection="column">
-        <Container>
-          <Box display="flex" flexDirection="column" mt={4} style={{}}>
-            <Typography align="center" variant="h5" gutterBottom>
-              A super simple app with one purpose, no ads, no tracking and no cookies.
+        <Container maxWidth="md">
+          <Box display="flex" flexDirection="column" mt={4}>
+            <Typography align="center" variant="h5">
+              A super simple app for bypassing paywalls, no ads, no tracking and no cookies.
             </Typography>
             <form onSubmit={onSubmit} style={{ width: '100%' }}>
               <StyledTextField
@@ -64,7 +67,6 @@ export default function Home() {
                 placeholder="Paste link here"
                 value={url}
                 onChange={onUrlChange}
-                fullWidth
                 InputLabelProps={{
                   shrink: true,
                   style: { color: 'var(--color-font-main)' },
@@ -75,12 +77,12 @@ export default function Home() {
               />
               <Box mt={2} />
               <Typography variant="body1" gutterBottom>
-                Enter the url of any page with annoying content that needs to be skipped and you will be redirected to a
-                site where you shuould be able to read you content unobstructed.
+                Enter the url of any page with annoying paywalls and you will be redirected to a site where you should
+                be able to read you content unobstructed (this site is offered with no warranties or guarantee&apos;s).
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Also, if you would like to save this site site as an executable bookmarklet, you will be able to click a
-                bookmark whilst you are on the offending page and be automatically redirected.
+                Also, if you would like to save this site as an executable bookmarklet, you will be able to click it
+                whilst you are on any paywalled page and be automatically redirected.
               </Typography>
               <NoSsr>
                 <Typography variant="body1" gutterBottom>
@@ -89,23 +91,22 @@ export default function Home() {
                     <span
                       dangerouslySetInnerHTML={{
                         __html: `<a href="javascript:window.location.replace(\`${window?.location?.origin}/?url=\$\{window.location.href\}\`);"
-                       title='Skip it!'>This link</a>`,
+                       title='Skip it!' class="bookmarklet">This link</a>`,
                       }}
                     ></span>
                   )}{' '}
-                  to your book marks bar. Then head to a site where you want to skip, and click the book bark whilst
-                  there.
+                  to your bookmarks bar. Then head to a site with paywalled content, and click the bookbark.
                 </Typography>
               </NoSsr>
               <Typography variant="body1" gutterBottom>
-                Alternatively, if you are on mobile, you should also get a prompt asking your to add this site to your
+                Alternatively, if you are on mobile, you should also get a prompt asking you to add this site to your
                 home screen. By installing this Progressive Web App (PWA) you will be able to
               </Typography>
               <ul>
                 <li>Access this site as a fullscreen app experience the same way you would access a normal app</li>
                 <li>
-                  Ability to &quot;Share&quot; any url that you are currently on straight to the app - this can be done
-                  in as little as two clicks!
+                  &quot;Share&quot; any url that you are currently on straight to the app - the same way you&apos;d
+                  share a page or link to a contact or messaging app!
                 </li>
               </ul>
               <Box mt={18} />
